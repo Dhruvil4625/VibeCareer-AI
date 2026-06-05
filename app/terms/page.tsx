@@ -24,9 +24,19 @@ export default function TermsPage() {
             <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
               Terms of <span className="gradient-text">Service</span>
             </h1>
-            <p className="text-sm" style={{ color: "var(--text-muted)" }}>
+            <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>
               Last updated: June 6, 2026
             </p>
+
+            {/* Hero Image */}
+            <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12">
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
+              <img
+                src="/images/legal_hero.png"
+                alt="Terms of Service"
+                className="w-full h-[160px] md:h-[240px] object-cover transition-transform duration-700 group-hover:scale-103"
+              />
+            </div>
           </div>
 
           {/* Terms Doc Content */}
