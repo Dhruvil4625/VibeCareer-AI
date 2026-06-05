@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import Link from "next/link";
 import { 
   Linkedin, 
   Sparkles, 
@@ -351,6 +352,25 @@ export default function ProfileOptimizerPage() {
             <p className="text-xs mb-4" style={{ color: "var(--text-muted)" }}>
               Paste your public LinkedIn profile link. VibeCareer AI will audit your layout, parse keyword details, and match your metrics against predicted high-demand roles.
             </p>
+
+            {/* Scraping Notice */}
+            <div 
+              className="p-3.5 rounded-xl border text-xs mb-4 leading-relaxed flex items-start gap-2.5"
+              style={{
+                background: "rgba(14, 165, 233, 0.05)",
+                borderColor: "rgba(14, 165, 233, 0.15)",
+                color: "var(--text-secondary)"
+              }}
+            >
+              <span className="text-base leading-none">💡</span>
+              <div className="space-y-1">
+                <p className="font-bold" style={{ color: "var(--text-primary)" }}>Scraping Integration Note</p>
+                <p>
+                  LinkedIn's security policies block direct external bots from scraping profile data (such as projects and certifications) without an active log-in session. 
+                  To ensure an accurate evaluation, VibeCareer AI securely utilizes the <strong>skills, projects, and certifications</strong> you have already defined in your local <Link href="/resume" className="text-[#0ea5e9] hover:underline font-semibold">Resume Workspace</Link>.
+                </p>
+              </div>
+            </div>
             
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 relative">
