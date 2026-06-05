@@ -6,8 +6,14 @@ import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { MouseSpotlightTracker } from "@/components/shared/MouseSpotlightTracker";
 import { Github, Linkedin, Mail, Phone, Code, Cpu, Award } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function AboutPage() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   return (
     <main className="relative min-h-screen overflow-x-hidden spotlight-grid dot-matrix" style={{ background: "var(--bg-base)" }}>
       <MouseSpotlightTracker />
@@ -41,7 +47,7 @@ export default function AboutPage() {
             >
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
               <img
-                src="/images/about_hero.png"
+                src={mounted && resolvedTheme === "light" ? "/images/about_hero_light.png" : "/images/about_hero.png"}
                 alt="About VibeCareer AI"
                 className="w-full h-[260px] md:h-[400px] object-cover transition-transform duration-700 group-hover:scale-103"
               />
