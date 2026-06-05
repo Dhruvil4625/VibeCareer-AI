@@ -337,6 +337,8 @@ export async function analyzeLinkedInProfile(
     targetRole?: string | null;
     experienceLevel?: string | null;
     skills?: string[];
+    projects?: Array<{ name: string; description: string; technologies?: string[] }>;
+    certifications?: Array<{ name: string; issuer: string }>;
   }
 ): Promise<{
   score: number;
@@ -354,6 +356,8 @@ Bio: ${userContext.bio ?? "Not provided"}
 Target Role: ${userContext.targetRole ?? "Software Engineer"}
 Experience Level: ${userContext.experienceLevel ?? "MID_LEVEL"}
 Extracted Skills: ${userContext.skills?.join(", ") ?? "React, JavaScript, Web Development"}
+${userContext.projects ? `Key Projects:\n${userContext.projects.map(p => `- ${p.name}: ${p.description} (Tech: ${p.technologies?.join(", ")})`).join("\n")}` : ""}
+${userContext.certifications ? `Certifications:\n${userContext.certifications.map(c => `- ${c.name} (Issued by: ${c.issuer})`).join("\n")}` : ""}
 
 Evaluate this candidate's fit, calculate their LinkedIn optimization strength, and predict job roles.
 Return a JSON object with:
@@ -370,28 +374,36 @@ Return JSON only, do not wrap in markdown or backticks.`;
 
   const primaryRole = getPrimaryRole(userContext.targetRole);
   const lowerRole = (userContext.targetRole || "").toLowerCase();
-  const hasML = lowerRole.includes("machine learning") || lowerRole.includes("ml") || lowerRole.includes("computer vision") || lowerRole.includes("predictive");
-  const hasFullStack = lowerRole.includes("full-stack") || lowerRole.includes("fullstack") || lowerRole.includes("django") || lowerRole.includes("react");
+  
+  // Combine all texts to scan for key terms
+  const projectTexts = (userContext.projects || []).map(p => `${p.name} ${p.description} ${(p.technologies || []).join(" ")}`).join(" ").toLowerCase();
+  const certTexts = (userContext.certifications || []).map(c => `${c.name} ${c.issuer}`).join(" ").toLowerCase();
+  const skillsTexts = (userContext.skills || []).join(" ").toLowerCase();
+  const combinedContext = `${lowerRole} ${projectTexts} ${certTexts} ${skillsTexts}`;
+
+  const hasML = combinedContext.includes("machine learning") || combinedContext.includes("ml") || combinedContext.includes("computer vision") || combinedContext.includes("predictive") || combinedContext.includes("vision") || combinedContext.includes("analytics");
+  const hasFullStack = combinedContext.includes("full-stack") || combinedContext.includes("fullstack") || combinedContext.includes("django") || combinedContext.includes("react");
+  const hasAI = combinedContext.includes("ai ") || combinedContext.includes("artificial intelligence") || combinedContext.includes("intelligent") || combinedContext.includes("automation");
 
   const fallbackRoles = [
     { 
       role: primaryRole, 
-      fitPercentage: 88, 
+      fitPercentage: 92, 
       rationale: `Directly aligns with your primary target profile as an ${primaryRole}.` 
     },
     { 
-      role: hasML ? "Machine Learning Engineer" : "AI Integration Engineer", 
-      fitPercentage: 84, 
+      role: hasML ? "Machine Learning Engineer" : (hasAI ? "AI Systems Integration Engineer" : "AI Solutions Engineer"), 
+      fitPercentage: 86, 
       rationale: hasML 
-        ? "Your background in Machine Learning, Computer Vision, and predictive analytics fits this role." 
-        : "Leverages your AI engineering skills to integrate intelligent automation systems." 
+        ? "Your project experience and certifications in machine learning/computer vision align perfectly." 
+        : "Your background in AI and automation tools indicates readiness for intelligent systems integration." 
     },
     { 
-      role: hasFullStack ? "Full-Stack Developer (React & Django)" : "Cloud Applications Engineer", 
-      fitPercentage: 78, 
+      role: hasFullStack ? "Full-Stack Developer (Django & React)" : "Backend Software Engineer", 
+      fitPercentage: 81, 
       rationale: hasFullStack 
-        ? "Your technologies show proficiency in full-stack stacks like Django and React." 
-        : "Matches your target direction for building scalable software architectures." 
+        ? "Your profile showcases strong capability in frontend (React) and backend (Django) frameworks." 
+        : "Strong technical capabilities and certifications match backend developer specifications." 
     }
   ];
 
