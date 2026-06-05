@@ -5,8 +5,14 @@ import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { MouseSpotlightTracker } from "@/components/shared/MouseSpotlightTracker";
 import { Shield } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function CookiePolicyPage() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   return (
     <main className="relative min-h-screen overflow-x-hidden spotlight-grid dot-matrix" style={{ background: "var(--bg-base)" }}>
       <MouseSpotlightTracker />
@@ -32,7 +38,7 @@ export default function CookiePolicyPage() {
             <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12">
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
               <img
-                src="/images/legal_hero.png"
+                src={mounted && resolvedTheme === "light" ? "/images/legal_hero_light.png" : "/images/legal_hero.png"}
                 alt="Cookie Policy"
                 className="w-full h-[160px] md:h-[240px] object-cover transition-transform duration-700 group-hover:scale-103"
               />
