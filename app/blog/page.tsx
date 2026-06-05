@@ -76,9 +76,19 @@ export default function BlogPage() {
               <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
                 Inside Career <span className="gradient-text">Acceleration</span>
               </h1>
-              <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--text-secondary)" }}>
+              <p className="text-lg max-w-xl mx-auto mb-10" style={{ color: "var(--text-secondary)" }}>
                 Stay up to date with resume audits, speech mock interview feedback, and corporate hiring trends.
               </p>
+
+              {/* Hero Image */}
+              <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12">
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
+                <img
+                  src="/images/blog_hero.png"
+                  alt="VibeCareer Blog"
+                  className="w-full h-[200px] md:h-[300px] object-cover transition-transform duration-700 group-hover:scale-103"
+                />
+              </div>
             </motion.div>
           </div>
 
@@ -135,16 +145,18 @@ export default function BlogPage() {
                 {/* Content body */}
                 <div className="p-8 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-[var(--brand-primary)] transition-colors line-clamp-2" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
-                      {post.title}
-                    </h3>
+                    <Link href={`/blog/${post.id}`} className="block group/title">
+                      <h3 className="text-xl font-bold mb-3 group-hover/title:text-[var(--brand-primary)] transition-colors line-clamp-2" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
+                        {post.title}
+                      </h3>
+                    </Link>
                     <p className="text-sm leading-relaxed mb-6 line-clamp-3 text-[var(--text-secondary)]">
                       {post.excerpt}
                     </p>
                   </div>
                   
                   <Link
-                    href="#"
+                    href={`/blog/${post.id}`}
                     className="inline-flex items-center gap-2 text-xs font-bold text-[var(--brand-primary)] hover:gap-3 transition-all w-fit"
                   >
                     Read Full Article
