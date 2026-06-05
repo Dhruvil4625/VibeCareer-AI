@@ -53,8 +53,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "User not found" }, { status: 404 });
       }
 
-      // Try to fetch candidate skills from their latest resume
+      // Try to fetch candidate skills, projects, and certifications from their latest resume
       let skills: string[] = [];
+      let projects: Array<{ name: string; description: string; technologies?: string[] }> = [];
+      let certifications: Array<{ name: string; issuer: string }> = [];
+
       try {
         const latestResume = await prisma.resume.findFirst({
           where: { userId: session.user.id },
@@ -66,9 +69,22 @@ export async function POST(req: NextRequest) {
           if (contentObj.skills && Array.isArray(contentObj.skills)) {
             skills = contentObj.skills.map((s: any) => typeof s === "string" ? s : s.name ?? "");
           }
+          if (contentObj.projects && Array.isArray(contentObj.projects)) {
+            projects = contentObj.projects.map((p: any) => ({
+              name: p.name || "",
+              description: p.description || "",
+              technologies: p.technologies || []
+            }));
+          }
+          if (contentObj.certifications && Array.isArray(contentObj.certifications)) {
+            certifications = contentObj.certifications.map((c: any) => ({
+              name: c.name || "",
+              issuer: c.issuer || ""
+            }));
+          }
         }
       } catch (resumeError) {
-        console.warn("Could not fetch skills from resume context:", resumeError);
+        console.warn("Could not fetch details from resume context:", resumeError);
       }
 
       const analysis = await analyzeLinkedInProfile(profileUrl, {
@@ -77,6 +93,8 @@ export async function POST(req: NextRequest) {
         targetRole: user.targetRole,
         experienceLevel: user.experienceLevel,
         skills: skills.length > 0 ? skills : undefined,
+        projects: projects.length > 0 ? projects : undefined,
+        certifications: certifications.length > 0 ? certifications : undefined,
       });
 
       return NextResponse.json({ type: "link-analysis", ...analysis });
