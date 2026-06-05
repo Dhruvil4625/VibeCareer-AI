@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { MouseSpotlightTracker } from "@/components/shared/MouseSpotlightTracker";
 import { Mail, Phone, MapPin, Github, Linkedin, Send, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
 
 export default function ContactPage() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -53,7 +58,7 @@ export default function ContactPage() {
             >
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
               <img
-                src="/images/contact_hero.png"
+                src={mounted && resolvedTheme === "light" ? "/images/contact_hero_light.png" : "/images/contact_hero.png"}
                 alt="Contact VibeCareer AI"
                 className="w-full h-[200px] md:h-[300px] object-cover transition-transform duration-700 group-hover:scale-103"
               />
