@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
       let skills: string[] = [];
       let projects: Array<{ name: string; description: string; technologies?: string[] }> = [];
       let certifications: Array<{ name: string; issuer: string }> = [];
+      let hasResume = false;
 
       try {
         const latestResume = await prisma.resume.findFirst({
@@ -64,23 +65,26 @@ export async function POST(req: NextRequest) {
           orderBy: { updatedAt: "desc" },
         });
 
-        if (latestResume && latestResume.content) {
-          const contentObj = latestResume.content as any;
-          if (contentObj.skills && Array.isArray(contentObj.skills)) {
-            skills = contentObj.skills.map((s: any) => typeof s === "string" ? s : s.name ?? "");
-          }
-          if (contentObj.projects && Array.isArray(contentObj.projects)) {
-            projects = contentObj.projects.map((p: any) => ({
-              name: p.name || "",
-              description: p.description || "",
-              technologies: p.technologies || []
-            }));
-          }
-          if (contentObj.certifications && Array.isArray(contentObj.certifications)) {
-            certifications = contentObj.certifications.map((c: any) => ({
-              name: c.name || "",
-              issuer: c.issuer || ""
-            }));
+        if (latestResume) {
+          hasResume = true;
+          if (latestResume.content) {
+            const contentObj = latestResume.content as any;
+            if (contentObj.skills && Array.isArray(contentObj.skills)) {
+              skills = contentObj.skills.map((s: any) => typeof s === "string" ? s : s.name ?? "");
+            }
+            if (contentObj.projects && Array.isArray(contentObj.projects)) {
+              projects = contentObj.projects.map((p: any) => ({
+                name: p.name || "",
+                description: p.description || "",
+                technologies: p.technologies || []
+              }));
+            }
+            if (contentObj.certifications && Array.isArray(contentObj.certifications)) {
+              certifications = contentObj.certifications.map((c: any) => ({
+                name: c.name || "",
+                issuer: c.issuer || ""
+              }));
+            }
           }
         }
       } catch (resumeError) {
@@ -97,7 +101,16 @@ export async function POST(req: NextRequest) {
         certifications: certifications.length > 0 ? certifications : undefined,
       });
 
-      return NextResponse.json({ type: "link-analysis", ...analysis });
+      return NextResponse.json({
+        type: "link-analysis",
+        ...analysis,
+        resumeStats: {
+          hasResume,
+          projectsCount: projects.length,
+          certificationsCount: certifications.length,
+          skillsCount: skills.length,
+        }
+      });
     }
 
     // Handle Standard Section Optimization
