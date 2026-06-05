@@ -62,7 +62,7 @@ function getInitials(name: string) {
 }
 
 export function DashboardTopbar({ user, onMenuClick, onCommandPalette }: DashboardTopbarProps) {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -345,11 +345,11 @@ export function DashboardTopbar({ user, onMenuClick, onCommandPalette }: Dashboa
           {/* Theme toggle */}
           {mounted && (
             <button
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
               className="w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--border-default)] hover:bg-[var(--bg-muted)] transition-all"
               aria-label="Toggle theme"
             >
-              {theme === "dark" ? (
+              {resolvedTheme === "dark" ? (
                 <Sun className="w-4 h-4" style={{ color: "var(--text-secondary)" }} />
               ) : (
                 <Moon className="w-4 h-4" style={{ color: "var(--text-secondary)" }} />
