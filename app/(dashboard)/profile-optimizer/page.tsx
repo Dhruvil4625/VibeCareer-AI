@@ -53,6 +53,12 @@ interface LinkAnalysisResult {
   headlineSuggestions: string[];
   strengths: string[];
   improvements: string[];
+  resumeStats?: {
+    hasResume: boolean;
+    projectsCount: number;
+    certificationsCount: number;
+    skillsCount: number;
+  };
 }
 
 export default function ProfileOptimizerPage() {
@@ -452,6 +458,40 @@ export default function ProfileOptimizerPage() {
               {/* Main Column */}
               <div className="md:col-span-2 space-y-6">
                 
+                {/* Resume Workspace Integration Status Card */}
+                {(!linkAnalysisResult.resumeStats || 
+                  !linkAnalysisResult.resumeStats.hasResume || 
+                  linkAnalysisResult.resumeStats.projectsCount === 0 || 
+                  linkAnalysisResult.resumeStats.certificationsCount === 0) && (
+                  <div 
+                    className="card p-4 border flex items-start gap-3"
+                    style={{
+                      background: "rgba(245, 158, 11, 0.05)",
+                      borderColor: "rgba(245, 158, 11, 0.15)",
+                      color: "var(--text-secondary)"
+                    }}
+                  >
+                    <span className="text-base leading-none mt-0.5">⚠️</span>
+                    <div className="text-xs space-y-1">
+                      <p className="font-bold text-amber-500" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        Resume Integration Notice
+                      </p>
+                      <p className="leading-relaxed">
+                        {!linkAnalysisResult.resumeStats || !linkAnalysisResult.resumeStats.hasResume ? (
+                          <>
+                            We could not find a resume in your profile. Because LinkedIn blocks direct external scrapers, VibeCareer AI evaluates projects and certifications from your resume. Please go to the <Link href="/resume" className="text-[#0ea5e9] hover:underline font-semibold">Resume Workspace</Link> to create or upload one.
+                          </>
+                        ) : (
+                          <>
+                            We detected your resume but found <strong>{linkAnalysisResult.resumeStats.projectsCount} projects</strong> and <strong>{linkAnalysisResult.resumeStats.certificationsCount} certifications</strong>. 
+                            If you have projects or certifications on your LinkedIn profile, please add them to your <Link href="/resume" className="text-[#0ea5e9] hover:underline font-semibold">Resume Workspace</Link> first so they can be parsed and matched in this audit!
+                          </>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* predicted role fitment */}
                 <div className="card p-6 space-y-4">
                   <h3 className="text-sm font-bold flex items-center gap-1.5" style={{ color: "var(--text-primary)" }}>
