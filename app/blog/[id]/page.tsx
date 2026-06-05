@@ -7,6 +7,8 @@ import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { MouseSpotlightTracker } from "@/components/shared/MouseSpotlightTracker";
 import { ArrowLeft, Calendar, Clock, BookOpen, Sparkles, CheckCircle2, ChevronRight } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -264,6 +266,10 @@ const articlesData = {
 };
 
 export default function BlogPostPage({ params }: PageProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const resolvedParams = use(params);
   const id = resolvedParams.id as keyof typeof articlesData;
   const article = articlesData[id];
@@ -327,7 +333,7 @@ export default function BlogPostPage({ params }: PageProps) {
           >
             <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-30" />
             <img
-              src={article.image}
+              src={mounted && resolvedTheme === "light" ? article.image.replace(/\.png$/, "_light.png") : article.image}
               alt={article.title}
               className="w-full h-[260px] md:h-[400px] object-cover transition-transform duration-700 group-hover:scale-103"
             />
