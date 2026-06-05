@@ -28,9 +28,24 @@ export default function AboutPage() {
             <h1 className="text-4xl md:text-5xl font-black mb-6 tracking-tight leading-tight" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
               Empowering Careers Through <span className="gradient-text">AI Innovation</span>
             </h1>
-            <p className="text-lg md:text-xl leading-relaxed max-w-2xl mx-auto" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10" style={{ color: "var(--text-secondary)" }}>
               VibeCareer AI is built to democratize professional advancement. We leverage advanced large language models to help job seekers stand out, optimize resumes, and master interviews.
             </p>
+
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
+              <img
+                src="/images/about_hero.png"
+                alt="About VibeCareer AI"
+                className="w-full h-[260px] md:h-[400px] object-cover transition-transform duration-700 group-hover:scale-103"
+              />
+            </motion.div>
           </motion.div>
         </div>
 
