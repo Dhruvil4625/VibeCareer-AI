@@ -54,7 +54,7 @@ export default function CareersPage() {
 
       <section className="relative pt-32 pb-20 px-6">
         <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -67,9 +67,19 @@ export default function CareersPage() {
               <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
                 Build the Future of <span className="gradient-text">Recruiting</span>
               </h1>
-              <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--text-secondary)" }}>
+              <p className="text-lg max-w-xl mx-auto mb-10" style={{ color: "var(--text-secondary)" }}>
                 Help us create the AI tools that empower candidates to showcase their actual skill strengths.
               </p>
+
+              {/* Hero Image */}
+              <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12">
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
+                <img
+                  src="/images/careers_hero.png"
+                  alt="Careers at VibeCareer"
+                  className="w-full h-[200px] md:h-[300px] object-cover transition-transform duration-700 group-hover:scale-103"
+                />
+              </div>
             </motion.div>
           </div>
 
