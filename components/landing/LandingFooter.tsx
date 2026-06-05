@@ -62,12 +62,13 @@ export function LandingFooter() {
             <div className="flex items-center gap-3">
               {social.map((s) => {
                 const Icon = s.icon;
+                const isMail = s.href.startsWith("mailto:");
                 return (
                   <a
                     key={s.label}
                     href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={isMail ? undefined : "_blank"}
+                    rel={isMail ? undefined : "noopener noreferrer"}
                     aria-label={s.label}
                     className="w-9 h-9 rounded-lg border border-[var(--border-default)] flex items-center justify-center transition-all hover:border-[var(--brand-primary)] hover:bg-[var(--bg-muted)]"
                   >
