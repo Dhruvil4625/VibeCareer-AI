@@ -118,6 +118,11 @@ export default function ProfileOptimizerPage() {
     setIsLoading(true);
     setLinkAnalysisResult(null);
     
+    let urlToSend = profileUrl.trim();
+    if (urlToSend && !/^https?:\/\//i.test(urlToSend)) {
+      urlToSend = `https://${urlToSend}`;
+    }
+
     try {
       const response = await fetch("/api/ai/optimizer", {
         method: "POST",
@@ -125,7 +130,7 @@ export default function ProfileOptimizerPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          profileUrl,
+          profileUrl: urlToSend,
         }),
       });
 
