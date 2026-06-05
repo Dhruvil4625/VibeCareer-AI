@@ -23,6 +23,15 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
+
+    // Preprocess profileUrl to ensure it starts with a protocol to satisfy Zod .url() validation
+    if (body.profileUrl && typeof body.profileUrl === "string") {
+      let url = body.profileUrl.trim();
+      if (url && !/^https?:\/\//i.test(url)) {
+        body.profileUrl = `https://${url}`;
+      }
+    }
+
     const parsed = optimizerSchema.safeParse(body);
 
     if (!parsed.success) {
