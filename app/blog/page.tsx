@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { MouseSpotlightTracker } from "@/components/shared/MouseSpotlightTracker";
 import { BookOpen, Calendar, Clock, ArrowRight, Sparkles } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const blogPosts = [
   {
@@ -50,6 +51,10 @@ const blogPosts = [
 const categories = ["All", "Resumes", "Interviews", "LinkedIn", "Career Advice"];
 
 export default function BlogPage() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredPosts = selectedCategory === "All"
@@ -84,7 +89,7 @@ export default function BlogPage() {
               <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12">
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
                 <img
-                  src="/images/blog_hero.png"
+                  src={mounted && resolvedTheme === "light" ? "/images/blog_hero_light.png" : "/images/blog_hero.png"}
                   alt="VibeCareer Blog"
                   className="w-full h-[200px] md:h-[300px] object-cover transition-transform duration-700 group-hover:scale-103"
                 />
