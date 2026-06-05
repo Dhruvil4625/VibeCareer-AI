@@ -323,6 +323,12 @@ JSON format only.`;
 /**
  * Audit LinkedIn Profile URL and predict job roles
  */
+function getPrimaryRole(role: string | null | undefined): string {
+  if (!role) return "Software Engineer";
+  const parts = role.split(/[|/,]/);
+  return parts[0]?.trim() || role.trim() || "Software Engineer";
+}
+
 export async function analyzeLinkedInProfile(
   profileUrl: string,
   userContext: {
@@ -362,20 +368,43 @@ Return a JSON object with:
 
 Return JSON only, do not wrap in markdown or backticks.`;
 
+  const primaryRole = getPrimaryRole(userContext.targetRole);
+  const lowerRole = (userContext.targetRole || "").toLowerCase();
+  const hasML = lowerRole.includes("machine learning") || lowerRole.includes("ml") || lowerRole.includes("computer vision") || lowerRole.includes("predictive");
+  const hasFullStack = lowerRole.includes("full-stack") || lowerRole.includes("fullstack") || lowerRole.includes("django") || lowerRole.includes("react");
+
+  const fallbackRoles = [
+    { 
+      role: primaryRole, 
+      fitPercentage: 88, 
+      rationale: `Directly aligns with your primary target profile as an ${primaryRole}.` 
+    },
+    { 
+      role: hasML ? "Machine Learning Engineer" : "AI Integration Engineer", 
+      fitPercentage: 84, 
+      rationale: hasML 
+        ? "Your background in Machine Learning, Computer Vision, and predictive analytics fits this role." 
+        : "Leverages your AI engineering skills to integrate intelligent automation systems." 
+    },
+    { 
+      role: hasFullStack ? "Full-Stack Developer (React & Django)" : "Cloud Applications Engineer", 
+      fitPercentage: 78, 
+      rationale: hasFullStack 
+        ? "Your technologies show proficiency in full-stack stacks like Django and React." 
+        : "Matches your target direction for building scalable software architectures." 
+    }
+  ];
+
   return generateStructured(prompt, {
     score: 72,
-    predictedRoles: [
-      { role: userContext.targetRole ?? "Frontend Engineer", fitPercentage: 88, rationale: "Aligns with your experience and core developer skill set." },
-      { role: "Full Stack Developer", fitPercentage: 80, rationale: "Your technologies indicate strong capability in frontend and backend APIs." },
-      { role: "Technical Product Engineer", fitPercentage: 75, rationale: "Matches user interest in building scalable web architectures." }
-    ],
+    predictedRoles: fallbackRoles,
     headlineSuggestions: [
-      `${userContext.name ?? "Professional"} | Specialized in React & Next.js | Building Scalable Web Apps`,
-      `${userContext.name ?? "Developer"} | ${userContext.targetRole ?? "Software Engineer"} | ATS-Optimized Solutions`,
-      `Passionate Developer crafting UI/UX experiences & modern APIs`
+      `${userContext.name ?? "Professional"} | Specialized in ${primaryRole} | Building Intelligent Solutions`,
+      `${userContext.name ?? "Developer"} | ${primaryRole} | Python, React, AI & Automation`,
+      `Passionate Engineer crafting intelligent automation systems & modern web APIs`
     ],
-    strengths: ["Good structural layout", "Clear target direction", "Core technical stack defined"],
-    improvements: ["Add more metric outcomes in experience bullets", "Expand professional summary to show unique value proposition", "Optimize headline keywords for recruiters"]
+    strengths: ["Strong technical core stack", "Clear focus on AI & intelligent automation", "Versatile experience"],
+    improvements: ["Detail specific project metrics in your summary", "Enforce keyword alignment for Machine Learning roles", "Highlight computer vision achievements"]
   });
 }
 
