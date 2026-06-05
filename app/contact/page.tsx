@@ -36,13 +36,28 @@ export default function ContactPage() {
 
       <section className="relative pt-32 pb-20 px-6">
         <div className="max-w-5xl mx-auto relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight" style={{ fontFamily: "Outfit, sans-serif", color: "var(--text-primary)" }}>
               Get in <span className="gradient-text">Touch</span>
             </h1>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: "var(--text-secondary)" }}>
+            <p className="text-lg max-w-xl mx-auto mb-10" style={{ color: "var(--text-secondary)" }}>
               Have questions about VibeCareer AI or want to connect with the developer? We are here to help.
             </p>
+
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
+              <img
+                src="/images/contact_hero.png"
+                alt="Contact VibeCareer AI"
+                className="w-full h-[200px] md:h-[300px] object-cover transition-transform duration-700 group-hover:scale-103"
+              />
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-12">
