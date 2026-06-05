@@ -17,7 +17,7 @@ const navLinks = [
 export function LandingNavbar() {
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, setTheme }         = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted]       = useState(false);
   const { data: session }           = useSession();
 
@@ -86,11 +86,11 @@ export function LandingNavbar() {
             {/* Theme toggle */}
             {mounted && (
               <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
                 className="w-9 h-9 rounded-lg flex items-center justify-center transition-all border border-[var(--border-default)] hover:border-[var(--brand-primary)] hover:bg-[var(--bg-muted)]"
                 aria-label="Toggle theme"
               >
-                {theme === "dark" ? (
+                {resolvedTheme === "dark" ? (
                   <Sun className="w-4 h-4" style={{ color: "var(--text-secondary)" }} />
                 ) : (
                   <Moon className="w-4 h-4" style={{ color: "var(--text-secondary)" }} />
