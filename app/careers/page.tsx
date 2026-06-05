@@ -6,6 +6,8 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 import { MouseSpotlightTracker } from "@/components/shared/MouseSpotlightTracker";
 import { Briefcase, MapPin, Clock, DollarSign, ArrowRight, Star } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const jobs = [
   {
@@ -43,6 +45,10 @@ const jobs = [
 ];
 
 export default function CareersPage() {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const handleApply = (jobTitle: string) => {
     toast.success(`Application portal opened for: ${jobTitle}. Send your CV to ramoliadk@gmail.com!`);
   };
@@ -75,7 +81,7 @@ export default function CareersPage() {
               <div className="relative max-w-4xl mx-auto rounded-3xl overflow-hidden border border-[var(--border-default)] shadow-[var(--shadow-lg)] group mb-12">
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-base)] via-transparent to-transparent z-10 opacity-40" />
                 <img
-                  src="/images/careers_hero.png"
+                  src={mounted && resolvedTheme === "light" ? "/images/careers_hero_light.png" : "/images/careers_hero.png"}
                   alt="Careers at VibeCareer"
                   className="w-full h-[200px] md:h-[300px] object-cover transition-transform duration-700 group-hover:scale-103"
                 />
